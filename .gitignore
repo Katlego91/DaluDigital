@@ -1,0 +1,39 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Dependencies
+node_modules/
+
+# Environment & secrets
+.env
+.env.*
+config.js
+
+# Logs
+*.log
+
+# Business documents (sensitive — do NOT commit)
+*.docx
+*.xlsx
+*.pdf
+*.csv
+*.vsdx
+*.drawio
+~$*
+
+# Archives
+*.zip
+
+# Laravel source & deploy folders
+dalu-digital-laravel/
+dalu-digital-laravel-deploy/
+daludigital-deploy.zip
+dalu-digital-laravel.zip
+dalu-digital-laravel-deploy.zip
+ziQQP2Dp
+
+# Prompt/strategy docs
+Dalu-Digital-*-Prompt.md
+Dalu-Digital-*-Review.md
+Katlego_Competitor_*.xlsx

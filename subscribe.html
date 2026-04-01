@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <script src="config.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Client Support & Maintenance | Dalu Digital</title>
+  <meta name="description" content="Request website changes or subscribe to ongoing maintenance. Available exclusively for Dalu Digital clients." />
+  <meta name="robots" content="noindex" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #FAF6F3;
+      --white: #FFFFFF;
+      --accent: #7A1D3E;
+      --accent2: #C73E6B;
+      --gradient: linear-gradient(135deg, #7A1D3E, #C73E6B);
+      --dark: #18132A;
+      --body: #5A5470;
+      --muted: #9B95A8;
+      --border: #EBE5E0;
+    }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--body);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Nav ── */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+    }
+    .nav-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between; height: 64px;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none; color: var(--dark);
+      font-family: 'DM Serif Display', serif; font-size: 18px;
+    }
+    .nav-logo img { height: 32px; width: auto; }
+    .btn-accent {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 28px; border-radius: 100px;
+      background: var(--gradient); color: #fff;
+      font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 14px;
+      text-decoration: none; border: none; cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .btn-accent:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 28px; border-radius: 100px;
+      background: var(--white); color: var(--accent);
+      font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 14px;
+      text-decoration: none; border: 2px solid var(--accent); cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-outline:hover { background: rgba(122,29,62,0.04); }
+
+    /* ── Main ── */
+    .page-wrapper {
+      flex: 1; max-width: 780px; margin: 0 auto;
+      padding: 48px 24px 80px; width: 100%;
+    }
+    .page-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      color: var(--dark); margin-bottom: 8px;
+    }
+    .page-subtitle {
+      font-size: 16px; color: var(--body);
+      margin-bottom: 12px; line-height: 1.65;
+    }
+    .gradient-text {
+      background: var(--gradient);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .client-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 100px;
+      background: rgba(122,29,62,0.06); color: var(--accent);
+      font-size: 12px; font-weight: 600; margin-bottom: 32px;
+    }
+
+    /* ── Payment type toggle ── */
+    .payment-toggle {
+      display: flex; gap: 0; margin-bottom: 32px;
+      background: var(--white); border-radius: 14px;
+      border: 1.5px solid var(--border); overflow: hidden;
+    }
+    .toggle-btn {
+      flex: 1; padding: 14px 20px; text-align: center;
+      font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 14px;
+      color: var(--body); background: none; border: none; cursor: pointer;
+      transition: all 0.25s;
+    }
+    .toggle-btn.active {
+      background: var(--accent); color: #fff;
+    }
+    .toggle-btn:not(.active):hover { background: rgba(122,29,62,0.04); }
+
+    /* ── Panel sections ── */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* ── Cards ── */
+    .option-card {
+      background: var(--white); border: 2px solid var(--border);
+      border-radius: 16px; padding: 28px 24px; cursor: pointer;
+      transition: all 0.25s; position: relative;
+    }
+    .option-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .option-card.selected {
+      border-color: var(--accent);
+      background: rgba(122,29,62,0.02);
+      box-shadow: 0 0 0 3px rgba(122,29,62,0.08);
+    }
+    .option-card.selected::after {
+      content: ''; position: absolute; top: 14px; right: 14px;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--accent)
+        url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='20 6 9 17 4 12' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+        no-repeat center;
+    }
+    .card-name { font-weight: 700; font-size: 16px; color: var(--dark); margin-bottom: 4px; }
+    .card-price { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--dark); }
+    .card-period { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+    .card-desc { font-size: 13px; color: var(--body); line-height: 1.55; }
+    .card-includes { margin-top: 12px; }
+    .card-includes li {
+      display: flex; align-items: flex-start; gap: 8px;
+      font-size: 12.5px; color: var(--body); padding: 3px 0;
+      list-style: none;
+    }
+    .card-includes svg { flex-shrink: 0; margin-top: 2px; }
+
+    /* ── Months selector ── */
+    .months-row {
+      display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap;
+    }
+    .month-chip {
+      padding: 8px 18px; border-radius: 100px;
+      border: 1.5px solid var(--border); background: var(--white);
+      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600;
+      color: var(--body); cursor: pointer; transition: all 0.2s;
+    }
+    .month-chip:hover { border-color: var(--accent); }
+    .month-chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+    /* ── Form ── */
+    .form-section {
+      background: var(--white); border-radius: 20px;
+      padding: 36px 32px; border: 1px solid var(--border); margin-top: 32px;
+    }
+    .form-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;
+    }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-label { font-size: 13px; font-weight: 600; color: var(--dark); }
+    .form-input {
+      padding: 12px 16px; border-radius: 12px;
+      border: 1.5px solid var(--border);
+      font-family: 'DM Sans', sans-serif; font-size: 14px;
+      color: var(--dark); background: var(--white);
+      transition: border-color 0.2s; outline: none;
+    }
+    .form-input:focus { border-color: var(--accent); }
+    .form-input::placeholder { color: var(--muted); }
+    .form-summary {
+      background: var(--bg); border-radius: 12px;
+      padding: 20px; margin: 24px 0;
+    }
+    .form-summary-row {
+      display: flex; justify-content: space-between;
+      font-size: 14px; padding: 4px 0;
+    }
+    .form-summary-row.total {
+      font-weight: 700; font-size: 16px; color: var(--dark);
+      border-top: 1.5px solid var(--border);
+      margin-top: 8px; padding-top: 12px;
+    }
+    .form-error {
+      display: none;
+      background: rgba(220,38,38,0.06); border: 1px solid rgba(220,38,38,0.12);
+      color: #DC2626; padding: 12px 16px; border-radius: 10px;
+      font-size: 13px; margin-bottom: 16px;
+    }
+    .form-note {
+      font-size: 12px; color: var(--muted);
+      text-align: center; margin-top: 16px; line-height: 1.5;
+    }
+    .secure-badge {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      font-size: 12px; color: var(--muted); margin-top: 12px;
+    }
+
+    /* ── Management panel ── */
+    .manage-section {
+      margin-top: 48px; padding-top: 48px;
+      border-top: 2px solid var(--border);
+    }
+    .lookup-row {
+      display: flex; gap: 12px; margin-top: 16px;
+    }
+    .lookup-row .form-input { flex: 1; }
+    .sub-card {
+      background: var(--white); border-radius: 16px;
+      border: 1px solid var(--border); padding: 28px;
+      margin-top: 16px;
+    }
+    .sub-status {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 12px; border-radius: 100px;
+      font-size: 12px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .sub-status.active { background: rgba(16,185,129,0.1); color: #059669; }
+    .sub-status.cancelled { background: rgba(220,38,38,0.08); color: #DC2626; }
+    .sub-status.completed { background: rgba(99,102,241,0.1); color: #6366F1; }
+    .sub-status.pending { background: rgba(245,158,11,0.1); color: #D97706; }
+    .sub-detail-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 16px; margin: 20px 0;
+    }
+    .sub-detail label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 600; }
+    .sub-detail p { font-size: 15px; color: var(--dark); font-weight: 600; margin-top: 2px; }
+    .payment-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 13px;
+    }
+    .payment-row:last-child { border-bottom: none; }
+
+    /* ── Verification flow ── */
+    .verify-step { display: none; }
+    .verify-step.active { display: block; }
+    .code-input-group {
+      display: flex; gap: 8px; margin-top: 16px;
+    }
+    .code-input {
+      flex: 1; text-align: center; font-size: 24px; font-weight: 700;
+      letter-spacing: 8px; font-family: 'DM Sans', monospace;
+      padding: 14px 16px; border: 1.5px solid var(--border);
+      border-radius: 12px; background: var(--white);
+      color: var(--dark); transition: border-color 0.2s;
+    }
+    .code-input:focus { border-color: var(--accent); outline: none; }
+    .code-input::placeholder { letter-spacing: 4px; font-size: 16px; color: var(--muted); }
+    .verify-info {
+      display: flex; align-items: flex-start; gap: 12px;
+      background: rgba(122,29,62,0.04); border: 1px solid rgba(122,29,62,0.1);
+      border-radius: 12px; padding: 16px; margin-top: 16px; font-size: 13px;
+      color: var(--body); line-height: 1.5;
+    }
+    .verify-info svg { flex-shrink: 0; margin-top: 1px; }
+    .resend-link {
+      color: var(--accent); font-weight: 600; cursor: pointer;
+      background: none; border: none; font-size: 13px;
+      text-decoration: underline; padding: 0;
+    }
+    .resend-link:hover { color: var(--accent2); }
+    .resend-link:disabled { color: var(--muted); cursor: not-allowed; text-decoration: none; }
+    .verify-back {
+      color: var(--muted); font-size: 13px; cursor: pointer;
+      background: none; border: none; margin-top: 12px;
+      text-decoration: underline; padding: 0;
+    }
+    .verify-back:hover { color: var(--body); }
+
+    .cancel-modal {
+      display: none; position: fixed; inset: 0; z-index: 1000;
+      background: rgba(24,19,42,0.5); backdrop-filter: blur(4px);
+      align-items: center; justify-content: center; padding: 24px;
+    }
+    .cancel-modal.show { display: flex; }
+    .cancel-box {
+      background: var(--white); border-radius: 20px;
+      padding: 36px; max-width: 440px; width: 100%;
+      box-shadow: 0 20px 60px rgba(24,19,42,0.2);
+    }
+    .cancel-reasons { display: flex; flex-direction: column; gap: 8px; margin: 16px 0; }
+    .cancel-reason-btn {
+      padding: 12px 16px; border-radius: 10px;
+      border: 1.5px solid var(--border); background: var(--white);
+      font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--body);
+      cursor: pointer; text-align: left; transition: all 0.2s;
+    }
+    .cancel-reason-btn:hover { border-color: var(--accent); }
+    .cancel-reason-btn.selected { border-color: var(--accent); background: rgba(122,29,62,0.03); color: var(--dark); font-weight: 600; }
+    .btn-danger {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 12px 28px; border-radius: 100px;
+      background: #DC2626; color: #fff;
+      font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 14px;
+      border: none; cursor: pointer; transition: opacity 0.2s; width: 100%;
+    }
+    .btn-danger:hover { opacity: 0.9; }
+    .btn-ghost {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 12px 28px; border-radius: 100px;
+      background: none; color: var(--body);
+      font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 14px;
+      border: none; cursor: pointer; width: 100%;
+    }
+
+    /* ── Footer ── */
+    .page-footer {
+      text-align: center; padding: 24px;
+      font-size: 12px; color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+    .page-footer a { color: var(--accent); text-decoration: none; }
+
+    /* ── FAQ Accordion ── */
+    .faq-item {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .faq-item:hover { border-color: rgba(122,29,62,0.18); }
+    .faq-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 18px 20px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--dark);
+      text-align: left;
+      gap: 12px;
+      line-height: 1.4;
+    }
+    .faq-icon {
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(122,29,62,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s, background 0.3s;
+    }
+    .faq-icon svg {
+      width: 12px;
+      height: 12px;
+      stroke: var(--accent);
+      stroke-width: 2.5;
+      transition: transform 0.3s;
+    }
+    .faq-item.open .faq-icon {
+      background: var(--accent);
+      transform: rotate(45deg);
+    }
+    .faq-item.open .faq-icon svg { stroke: #fff; }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.3s ease;
+      padding: 0 20px;
+    }
+    .faq-item.open .faq-answer {
+      max-height: 200px;
+      padding: 0 20px 18px;
+    }
+    .faq-answer p {
+      font-size: 13px;
+      color: var(--body);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 600px) {
+      .form-row { grid-template-columns: 1fr; }
+      .form-section { padding: 28px 20px; }
+      .card-price { font-size: 24px; }
+      .options-grid { grid-template-columns: 1fr !important; }
+      .sub-detail-grid { grid-template-columns: 1fr; }
+      .lookup-row { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <img src="assets/logo-nav.png" alt="Dalu Digital" />
+        <span>Dalu Digital</span>
+      </a>
+      <a href="index.html" class="btn-outline">Back to Homepage</a>
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <div class="page-wrapper">
+    <h1 class="page-title">Website <span class="gradient-text">Support & Changes</span></h1>
+    <p class="page-subtitle">Need updates, fixes, or new features on your Dalu Digital website? Choose how you'd like to pay — once-off or monthly — and we'll take care of the rest.</p>
+    <div class="client-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Exclusively for Dalu Digital clients
+    </div>
+
+    <!-- Payment type toggle -->
+    <div class="payment-toggle">
+      <button class="toggle-btn active" onclick="switchPanel('onceoff')">Once-off Payment</button>
+      <button class="toggle-btn" onclick="switchPanel('subscription')">Monthly Subscription</button>
+    </div>
+
+    <!-- ═══ ONCE-OFF PANEL ═══ -->
+    <div class="panel active" id="panel-onceoff">
+      <p style="font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);margin-bottom:16px;">Choose a package</p>
+      <div class="options-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;">
+        <div class="option-card selected" data-type="onceoff" data-amount="300" data-name="Quick Fix" onclick="selectOption(this)">
+          <p class="card-name">Quick Fix</p>
+          <p class="card-price">R300</p>
+          <p class="card-period">once-off</p>
+          <p class="card-desc">Small text changes, image swaps, colour tweaks, or link updates.</p>
+          <ul class="card-includes">
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Up to 1 hour of work</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Delivered within 48hrs</li>
+          </ul>
+        </div>
+        <div class="option-card" data-type="onceoff" data-amount="800" data-name="Update" onclick="selectOption(this)">
+          <p class="card-name">Update</p>
+          <p class="card-price">R800</p>
+          <p class="card-period">once-off</p>
+          <p class="card-desc">New section, feature tweak, layout change, or adding a new page.</p>
+          <ul class="card-includes">
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Up to 3 hours of work</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Delivered within 3 days</li>
+          </ul>
+        </div>
+        <div class="option-card" data-type="onceoff" data-amount="2000" data-name="Major Change" onclick="selectOption(this)">
+          <p class="card-name">Major Change</p>
+          <p class="card-price">R2,000</p>
+          <p class="card-period">once-off</p>
+          <p class="card-desc">New feature build, redesign, integration, or multi-page updates.</p>
+          <ul class="card-includes">
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Up to 8 hours of work</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Delivered within 1 week</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SUBSCRIPTION PANEL ═══ -->
+    <div class="panel" id="panel-subscription">
+      <p style="font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);margin-bottom:16px;">Choose a plan</p>
+      <div class="options-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div class="option-card selected" data-type="sub" data-amount="500" data-name="Essentials" onclick="selectOption(this)">
+          <p class="card-name">Essentials</p>
+          <p class="card-price">R500</p>
+          <p class="card-period">per month</p>
+          <p class="card-desc">Light ongoing support for small businesses that need occasional updates.</p>
+          <ul class="card-includes">
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Up to 2 hours of changes/mo</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Bug fixes & minor updates</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>WhatsApp support</li>
+          </ul>
+        </div>
+        <div class="option-card" data-type="sub" data-amount="1000" data-name="Growth" onclick="selectOption(this)">
+          <p class="card-name">Growth</p>
+          <p class="card-price">R1,000</p>
+          <p class="card-period">per month</p>
+          <p class="card-desc">For businesses that need regular changes, new features, or priority turnaround.</p>
+          <ul class="card-includes">
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Up to 5 hours of changes/mo</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Priority turnaround (24-48hrs)</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>New features & pages included</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>WhatsApp support</li>
+          </ul>
+        </div>
+      </div>
+      <p style="font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);margin:24px 0 12px;">How long do you need support?</p>
+      <div class="months-row" id="monthsRow">
+        <button class="month-chip" data-months="1" onclick="selectMonths(this)">1 month</button>
+        <button class="month-chip active" data-months="3" onclick="selectMonths(this)">3 months</button>
+        <button class="month-chip" data-months="6" onclick="selectMonths(this)">6 months</button>
+        <button class="month-chip" data-months="12" onclick="selectMonths(this)">12 months</button>
+        <button class="month-chip" data-months="0" onclick="selectMonths(this)">Ongoing</button>
+      </div>
+    </div>
+
+    <!-- ═══ FORM (shared) ═══ -->
+    <div class="form-section">
+      <p style="font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);margin-bottom:20px;">Your Details</p>
+      <form id="supportForm" onsubmit="handleSubmit(event)">
+        <div class="form-error" id="formError"></div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="firstName">First Name</label>
+            <input class="form-input" id="firstName" type="text" placeholder="e.g. Keabetswe" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="lastName">Last Name</label>
+            <input class="form-input" id="lastName" type="text" placeholder="e.g. Phokela" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group full">
+            <label class="form-label" for="email">Email Address</label>
+            <input class="form-input" id="email" type="email" placeholder="you@example.com" required />
+          </div>
+        </div>
+        <div class="form-row" id="descRow">
+          <div class="form-group full">
+            <label class="form-label" for="description">What do you need? <span style="font-weight:400;color:var(--muted);">(optional)</span></label>
+            <textarea class="form-input" id="description" rows="3" placeholder="Briefly describe the changes you need..." style="resize:vertical;"></textarea>
+          </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="form-summary">
+          <div class="form-summary-row">
+            <span>Package</span>
+            <span id="summaryPlan">Quick Fix</span>
+          </div>
+          <div class="form-summary-row" id="summaryBillingRow">
+            <span>Billing</span>
+            <span id="summaryBilling">Once-off</span>
+          </div>
+          <div class="form-summary-row total">
+            <span>Total</span>
+            <span id="summaryTotal">R300</span>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-accent" id="submitBtn" style="width:100%;justify-content:center;padding:14px 28px;font-size:15px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          Pay via PayFast
+        </button>
+
+        <div class="secure-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Secure payment via PayFast. Subscriptions can be cancelled anytime.
+        </div>
+        <p class="form-note">You'll be redirected to PayFast to complete your payment securely.<br>We never see or store your card details.</p>
+      </form>
+    </div>
+
+    <!-- FAQ Accordion -->
+    <div style="margin-top:48px;">
+      <h2 style="font-weight:700;font-size:16px;color:var(--dark);margin-bottom:16px;">Common Questions</h2>
+      <div style="display:flex;flex-direction:column;gap:10px;" id="faqList">
+
+        <div class="faq-item">
+          <button class="faq-toggle" onclick="toggleFaq(this)">
+            Is this for any website?
+            <span class="faq-icon"><svg viewBox="0 0 24 24" fill="none"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+          </button>
+          <div class="faq-answer"><p>No — this service is exclusively for websites and digital products built by Dalu Digital. We know your codebase inside-out, which means faster turnaround and better quality.</p></div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-toggle" onclick="toggleFaq(this)">
+            What counts as a "change"?
+            <span class="faq-icon"><svg viewBox="0 0 24 24" fill="none"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+          </button>
+          <div class="faq-answer"><p>Anything from updating text and images, to adding new sections, fixing bugs, adjusting styling or restructuring pages. Larger requests (like building a new feature or page) may count as multiple changes — we'll always let you know upfront.</p></div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-toggle" onclick="toggleFaq(this)">
+            Do unused changes roll over?
+            <span class="faq-icon"><svg viewBox="0 0 24 24" fill="none"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+          </button>
+          <div class="faq-answer"><p>No, unused changes do not carry over to the next month. Each billing cycle starts fresh, so we recommend using your included changes before the month ends.</p></div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-toggle" onclick="toggleFaq(this)">
+            What if my request is bigger than my plan?
+            <span class="faq-icon"><svg viewBox="0 0 24 24" fill="none"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+          </button>
+          <div class="faq-answer"><p>We'll let you know upfront if a request goes beyond your plan. You can upgrade your plan, pay the difference as a once-off, or we'll scope it into next month's changes.</p></div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-toggle" onclick="toggleFaq(this)">
+            How do I cancel my subscription?
+            <span class="faq-icon"><svg viewBox="0 0 24 24" fill="none"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+          </button>
+          <div class="faq-answer"><p>You can cancel anytime — no lock-in contracts. Use the "Manage Your Subscription" section below to verify your email, view your plan, and cancel with one click. You'll receive a confirmation email and no further payments will be deducted.</p></div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-toggle" onclick="toggleFaq(this)">
+            How do I check my subscription status?
+            <span class="faq-icon"><svg viewBox="0 0 24 24" fill="none"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+          </button>
+          <div class="faq-answer"><p>Scroll down to "Manage Your Subscription", enter the email address you used when subscribing, and we'll send you a 6-digit verification code. Once verified, you can view your plan details, payment history and next debit date.</p></div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-toggle" onclick="toggleFaq(this)">
+            What about hosting and domains?
+            <span class="faq-icon"><svg viewBox="0 0 24 24" fill="none"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+          </button>
+          <div class="faq-answer"><p>We help you set up hosting and your domain during project handover, but you pay those providers directly (e.g. Afrihost, Namecheap). Support plans cover website changes only — not hosting or domain fees.</p></div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-toggle" onclick="toggleFaq(this)">
+            Is my data safe?
+            <span class="faq-icon"><svg viewBox="0 0 24 24" fill="none"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+          </button>
+          <div class="faq-answer"><p>Yes. All payments are processed securely through PayFast (we never see your card details). Your subscription data is protected with encryption and email verification. We comply with POPIA and retain your records for up to 5 years, after which they are permanently deleted. Read our full <a href="privacy-policy.html" style="color:var(--accent);text-decoration:underline;">Privacy Policy</a>.</p></div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-toggle" onclick="toggleFaq(this)">
+            How does payment work?
+            <span class="faq-icon"><svg viewBox="0 0 24 24" fill="none"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+          </button>
+          <div class="faq-answer"><p>Choose your plan and duration, then complete payment through PayFast using credit/debit card, EFT, or any method PayFast supports. For ongoing plans, your card is debited automatically each month on the same date you subscribed.</p></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ MANAGE YOUR SUBSCRIPTION ═══ -->
+    <div class="manage-section">
+      <h2 class="page-title" style="font-size:clamp(1.4rem,3vw,2rem);">Manage Your <span class="gradient-text">Subscription</span></h2>
+      <p style="font-size:15px;color:var(--body);margin-top:4px;">Already a client? Verify your email to view your subscription, payment history, and manage your plan.</p>
+
+      <!-- STEP 1: Enter email -->
+      <div id="verifyStep1" class="verify-step active">
+        <div class="lookup-row">
+          <input class="form-input" id="lookupEmail" type="email" placeholder="Enter your email address" onkeydown="if(event.key==='Enter'){event.preventDefault();sendVerificationCode();}" />
+          <button class="btn-accent" onclick="sendVerificationCode()" id="sendCodeBtn" style="white-space:nowrap;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Send Code
+          </button>
+        </div>
+        <div id="step1Message" style="display:none;margin-top:16px;padding:16px;border-radius:12px;font-size:14px;line-height:1.5;"></div>
+        <div class="verify-info">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span>For your security, we'll send a 6-digit verification code to your email. This confirms you're the account holder before showing any subscription details.</span>
+        </div>
+      </div>
+
+      <!-- STEP 2: Enter verification code -->
+      <div id="verifyStep2" class="verify-step">
+        <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.15);border-radius:12px;padding:16px;margin-top:16px;font-size:14px;color:var(--body);line-height:1.6;">
+          If we have a subscription linked to <strong id="verifyEmailDisplay" style="color:var(--dark);"></strong>, a 6-digit verification code has been sent to your inbox. Please check your email (including your spam folder) and enter the code below.
+        </div>
+        <div class="code-input-group">
+          <input class="code-input" id="verifyCodeInput" type="text" maxlength="6" placeholder="000000" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" onkeydown="if(event.key==='Enter'){event.preventDefault();verifyCode();}" />
+          <button class="btn-accent" onclick="verifyCode()" id="verifyCodeBtn" style="white-space:nowrap;padding:14px 24px;">
+            Verify
+          </button>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;flex-wrap:wrap;gap:8px;">
+          <button class="verify-back" onclick="backToEmail()">
+            &larr; Use a different email
+          </button>
+          <div style="font-size:13px;color:var(--muted);">
+            Didn't receive it? <button class="resend-link" id="resendBtn" onclick="resendCode()">Resend code</button>
+            <span id="resendTimer" style="display:none;"></span>
+          </div>
+        </div>
+        <div id="verifyError" class="form-error" style="margin-top:12px;"></div>
+      </div>
+
+      <!-- STEP 3: Results (shown after successful verification) -->
+      <div id="verifyStep3" class="verify-step">
+        <div style="display:flex;align-items:center;gap:8px;margin-top:16px;margin-bottom:8px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span style="font-size:13px;color:#059669;font-weight:600;">Verified as <span id="verifiedEmailDisplay"></span></span>
+          <button class="verify-back" onclick="backToEmail()" style="margin:0;margin-left:auto;">Sign out</button>
+        </div>
+
+        <div id="lookupError" class="form-error" style="margin-top:16px;"></div>
+
+        <!-- No subscription found -->
+        <div id="noSubFound" style="display:none;" class="sub-card">
+          <p style="text-align:center;color:var(--muted);padding:20px 0;">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--border)" stroke-width="1.5" style="display:block;margin:0 auto 12px;"><circle cx="12" cy="12" r="10"/><path d="M8 15s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+            No active subscription found for this email.<br>
+            <span style="font-size:12px;">If you recently subscribed, it may take a few minutes to appear.</span>
+          </p>
+        </div>
+
+        <!-- Subscription card(s) -->
+        <div id="subCards"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cancel Modal -->
+  <div class="cancel-modal" id="cancelModal">
+    <div class="cancel-box">
+      <h3 style="font-weight:700;font-size:18px;color:var(--dark);margin-bottom:6px;">Cancel Subscription</h3>
+      <p style="font-size:14px;color:var(--body);margin-bottom:16px;">We're sorry to see you go. Could you let us know why you're cancelling? This helps us improve.</p>
+      <div class="cancel-reasons" id="cancelReasons">
+        <button class="cancel-reason-btn" onclick="selectCancelReason(this)">I no longer need changes</button>
+        <button class="cancel-reason-btn" onclick="selectCancelReason(this)">It's too expensive</button>
+        <button class="cancel-reason-btn" onclick="selectCancelReason(this)">I'm not happy with the service</button>
+        <button class="cancel-reason-btn" onclick="selectCancelReason(this)">I found another provider</button>
+        <button class="cancel-reason-btn" onclick="selectCancelReason(this)">Other reason</button>
+      </div>
+      <textarea class="form-input" id="cancelOtherReason" placeholder="Tell us more (optional)..." rows="2" style="width:100%;resize:vertical;margin-bottom:16px;display:none;"></textarea>
+      <button class="btn-danger" id="confirmCancelBtn" onclick="confirmCancel()">
+        Cancel My Subscription
+      </button>
+      <button class="btn-ghost" onclick="closeCancelModal()">
+        Never mind, keep my subscription
+      </button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="page-footer">
+    &copy; 2026 Dalu Digital. All rights reserved.
+    &nbsp;&middot;&nbsp; <a href="privacy-policy.html">Privacy Policy</a>
+    &nbsp;&middot;&nbsp; <a href="terms-and-conditions.html">Terms &amp; Conditions</a>
+    &nbsp;&middot;&nbsp; <a href="index.html">Back to homepage</a>
+  </footer>
+
+  <script>
+    // ── FAQ Accordion ──
+    function toggleFaq(btn) {
+      var item = btn.parentElement;
+      var wasOpen = item.classList.contains('open');
+      // Close all others
+      var items = document.querySelectorAll('.faq-item');
+      for (var i = 0; i < items.length; i++) { items[i].classList.remove('open'); }
+      // Toggle clicked one
+      if (!wasOpen) item.classList.add('open');
+    }
+
+    // ── State ──
+    var currentPanel = 'onceoff';
+    var selectedAmount = 300;
+    var selectedName = 'Quick Fix';
+    var selectedMonths = 3;
+
+    // ── Panel toggle ──
+    function switchPanel(panel) {
+      currentPanel = panel;
+      document.querySelectorAll('.toggle-btn').forEach(function(b) {
+        b.classList.toggle('active', b.textContent.trim().toLowerCase().indexOf(panel === 'onceoff' ? 'once' : 'month') > -1);
+      });
+      document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('active'); });
+      document.getElementById('panel-' + panel).classList.add('active');
+
+      // Reset to first option in new panel
+      var firstCard = document.querySelector('#panel-' + panel + ' .option-card');
+      if (firstCard) {
+        document.querySelectorAll('#panel-' + panel + ' .option-card').forEach(function(c) { c.classList.remove('selected'); });
+        firstCard.classList.add('selected');
+        selectedAmount = parseInt(firstCard.dataset.amount);
+        selectedName = firstCard.dataset.name;
+      }
+      updateSummary();
+    }
+
+    // ── Option selection ──
+    function selectOption(el) {
+      var parent = el.closest('.panel');
+      parent.querySelectorAll('.option-card').forEach(function(c) { c.classList.remove('selected'); });
+      el.classList.add('selected');
+      selectedAmount = parseInt(el.dataset.amount);
+      selectedName = el.dataset.name;
+      updateSummary();
+    }
+
+    // ── Month selection ──
+    function selectMonths(el) {
+      document.querySelectorAll('.month-chip').forEach(function(c) { c.classList.remove('active'); });
+      el.classList.add('active');
+      selectedMonths = parseInt(el.dataset.months);
+      updateSummary();
+    }
+
+    // ── Summary ──
+    function updateSummary() {
+      document.getElementById('summaryPlan').textContent = selectedName;
+
+      if (currentPanel === 'onceoff') {
+        document.getElementById('summaryBilling').textContent = 'Once-off';
+        document.getElementById('summaryTotal').textContent = 'R' + selectedAmount.toLocaleString('en-ZA');
+        document.getElementById('submitBtn').innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> Pay R' + selectedAmount.toLocaleString('en-ZA') + ' via PayFast';
+      } else {
+        var monthsLabel = selectedMonths === 0 ? 'Ongoing (cancel anytime)' : selectedMonths + ' month' + (selectedMonths > 1 ? 's' : '');
+        document.getElementById('summaryBilling').textContent = monthsLabel;
+        var total = selectedMonths === 0 ? selectedAmount + '/mo' : 'R' + (selectedAmount * selectedMonths).toLocaleString('en-ZA') + ' (R' + selectedAmount.toLocaleString('en-ZA') + '/mo × ' + selectedMonths + ')';
+        if (selectedMonths === 0) total = 'R' + selectedAmount.toLocaleString('en-ZA') + '/mo';
+        document.getElementById('summaryTotal').textContent = total;
+        document.getElementById('submitBtn').innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> Subscribe via PayFast';
+      }
+    }
+
+    // ── HTML Sanitization Helper ──
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    // ── Form Submit ──
+    // IMPORTANT: Move these to server-side environment variables before launch
+    var EDGE_FN_URL = window.__ENV__?.EDGE_FN_URL || '';
+    var PAYFAST_URL = 'https://www.payfast.co.za/eng/process';
+
+    function handleSubmit(e) {
+      e.preventDefault();
+      var firstName = document.getElementById('firstName').value.trim();
+      var lastName = document.getElementById('lastName').value.trim();
+      var email = document.getElementById('email').value.trim();
+      var description = document.getElementById('description').value.trim();
+      var errEl = document.getElementById('formError');
+      var btn = document.getElementById('submitBtn');
+
+      if (!firstName || !lastName || !email) {
+        errEl.textContent = 'Please fill in all required fields.';
+        errEl.style.display = 'block';
+        return;
+      }
+      errEl.style.display = 'none';
+      btn.textContent = 'Redirecting to PayFast...';
+      btn.disabled = true;
+
+      fetch(EDGE_FN_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: currentPanel,
+          plan: selectedName.toLowerCase().replace(/\s+/g, '-'),
+          amount: selectedAmount,
+          months: currentPanel === 'subscription' ? selectedMonths : 1,
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          description: description,
+        })
+      })
+      .then(function(r) { if (!r.ok) throw new Error('Server error'); return r.json(); })
+      .then(function(data) {
+        var form = document.createElement('form');
+        form.method = 'POST';
+        form.action = PAYFAST_URL;
+        Object.keys(data).forEach(function(key) {
+          var input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = key;
+          input.value = data[key];
+          form.appendChild(input);
+        });
+        document.body.appendChild(form);
+        form.submit();
+      })
+      .catch(function() {
+        errEl.textContent = 'Something went wrong. Please try again or WhatsApp us directly.';
+        errEl.style.display = 'block';
+        btn.disabled = false;
+        updateSummary();
+      });
+    }
+
+    // ── Subscription Lookup (with email verification) ──
+    var CANCEL_FN_URL = window.__ENV__?.CANCEL_FN_URL || '';
+    var SEND_CODE_URL = window.__ENV__?.SEND_CODE_URL || '';
+    var VERIFY_CODE_URL = window.__ENV__?.VERIFY_CODE_URL || '';
+
+    var currentSub = null;
+    var cancelReason = '';
+    var verifiedEmail = '';
+    var sessionToken = '';
+    var resendCooldown = 0;
+
+    // ── Step 1: Send verification code ──
+    function sendVerificationCode() {
+      var email = document.getElementById('lookupEmail').value.trim().toLowerCase();
+      if (!email) return;
+
+      var btn = document.getElementById('sendCodeBtn');
+      btn.innerHTML = 'Sending...';
+      btn.disabled = true;
+
+      fetch(SEND_CODE_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> Send Code';
+        btn.disabled = false;
+
+        if (data.error) {
+          var msgEl = document.getElementById('step1Message');
+          msgEl.style.display = 'block';
+          msgEl.style.background = 'rgba(220,38,38,0.06)';
+          msgEl.style.border = '1px solid rgba(220,38,38,0.12)';
+          msgEl.style.color = '#DC2626';
+          msgEl.textContent = data.error;
+          return;
+        }
+
+        // Move to step 2
+        verifiedEmail = email;
+        document.getElementById('verifyEmailDisplay').textContent = email;
+        document.getElementById('step1Message').style.display = 'none';
+        showVerifyStep(2);
+        document.getElementById('verifyCodeInput').focus();
+        startResendCooldown();
+      })
+      .catch(function() {
+        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> Send Code';
+        btn.disabled = false;
+        var msgEl = document.getElementById('step1Message');
+        msgEl.style.display = 'block';
+        msgEl.style.background = 'rgba(220,38,38,0.06)';
+        msgEl.style.border = '1px solid rgba(220,38,38,0.12)';
+        msgEl.style.color = '#DC2626';
+        msgEl.textContent = 'Something went wrong. Please try again or contact us via WhatsApp.';
+      });
+    }
+
+    // ── Step 2: Verify the code ──
+    function verifyCode() {
+      var code = document.getElementById('verifyCodeInput').value.trim();
+      var errorEl = document.getElementById('verifyError');
+      if (!code || code.length !== 6) {
+        errorEl.textContent = 'Please enter the 6-digit code from your email.';
+        errorEl.style.display = 'block';
+        return;
+      }
+
+      errorEl.style.display = 'none';
+      var btn = document.getElementById('verifyCodeBtn');
+      btn.textContent = 'Verifying...';
+      btn.disabled = true;
+
+      fetch(VERIFY_CODE_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: verifiedEmail, code: code })
+      })
+      .then(function(r) { return r.json().then(function(d) { return { ok: r.ok, data: d }; }); })
+      .then(function(result) {
+        btn.textContent = 'Verify';
+        btn.disabled = false;
+
+        if (!result.ok || result.data.error) {
+          errorEl.textContent = result.data.error || 'Invalid code. Please try again.';
+          errorEl.style.display = 'block';
+          return;
+        }
+
+        // Success! Store session token and show results
+        sessionToken = result.data.sessionToken || '';
+        document.getElementById('verifiedEmailDisplay').textContent = verifiedEmail;
+        showVerifyStep(3);
+
+        var subs = result.data.subscriptions || [];
+        var payments = result.data.payments || [];
+
+        if (subs.length === 0) {
+          document.getElementById('noSubFound').style.display = 'block';
+        } else {
+          renderSubscriptions(subs, payments);
+        }
+      })
+      .catch(function() {
+        btn.textContent = 'Verify';
+        btn.disabled = false;
+        errorEl.textContent = 'Something went wrong. Please try again.';
+        errorEl.style.display = 'block';
+      });
+    }
+
+    // ── Navigation helpers ──
+    function showVerifyStep(step) {
+      document.querySelectorAll('.verify-step').forEach(function(el) { el.classList.remove('active'); });
+      document.getElementById('verifyStep' + step).classList.add('active');
+    }
+
+    function backToEmail() {
+      verifiedEmail = '';
+      sessionToken = '';
+      document.getElementById('verifyCodeInput').value = '';
+      document.getElementById('verifyError').style.display = 'none';
+      document.getElementById('subCards').innerHTML = '';
+      document.getElementById('noSubFound').style.display = 'none';
+      showVerifyStep(1);
+    }
+
+    // ── Resend code with cooldown ──
+    function startResendCooldown() {
+      resendCooldown = 60;
+      var btn = document.getElementById('resendBtn');
+      var timer = document.getElementById('resendTimer');
+      btn.style.display = 'none';
+      timer.style.display = 'inline';
+
+      var interval = setInterval(function() {
+        resendCooldown--;
+        timer.textContent = 'Resend in ' + resendCooldown + 's';
+        if (resendCooldown <= 0) {
+          clearInterval(interval);
+          btn.style.display = 'inline';
+          timer.style.display = 'none';
+        }
+      }, 1000);
+    }
+
+    function resendCode() {
+      if (resendCooldown > 0) return;
+      sendVerificationCode();
+    }
+
+    function renderSubscriptions(subs, payments) {
+      var cardsEl = document.getElementById('subCards');
+      var html = '';
+
+      subs.forEach(function(sub) {
+        var statusClass = sub.status || 'pending';
+        var statusLabel = sub.status ? sub.status.charAt(0).toUpperCase() + sub.status.slice(1) : 'Pending';
+        var subPayments = payments.filter(function(p) { return p.subscription_id === sub.id; });
+
+        html += '<div class="sub-card">';
+        html += '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">';
+        html += '<h3 style="font-weight:700;font-size:17px;color:var(--dark);">' + escapeHtml(sub.plan_name) + '</h3>';
+        html += '<span class="sub-status ' + statusClass + '">' + statusLabel + '</span>';
+        html += '</div>';
+
+        // Duration label
+        var durationText = '';
+        if (sub.payment_type === 'subscription') {
+          if (sub.total_months && sub.total_months > 0) {
+            durationText = sub.total_months + ' month' + (sub.total_months > 1 ? 's' : '');
+          } else {
+            durationText = 'Ongoing (cancel anytime)';
+          }
+        }
+
+        html += '<div class="sub-detail-grid">';
+        html += '<div class="sub-detail"><label>Type</label><p>' + (sub.payment_type === 'subscription' ? 'Monthly Subscription' : 'Once-off Payment') + '</p></div>';
+        html += '<div class="sub-detail"><label>Amount</label><p>R' + sub.amount.toLocaleString('en-ZA') + (sub.payment_type === 'subscription' ? '/mo' : '') + '</p></div>';
+
+        if (sub.payment_type === 'subscription' && durationText) {
+          html += '<div class="sub-detail"><label>Duration</label><p>' + durationText + '</p></div>';
+        }
+
+        if (sub.start_date) {
+          html += '<div class="sub-detail"><label>Start Date</label><p>' + formatDate(sub.start_date) + '</p></div>';
+        }
+        if (sub.end_date) {
+          html += '<div class="sub-detail"><label>End Date</label><p>' + formatDate(sub.end_date) + '</p></div>';
+        } else if (sub.payment_type === 'subscription' && sub.total_months === 0 && sub.status === 'active') {
+          html += '<div class="sub-detail"><label>End Date</label><p style="color:var(--muted);">No end date</p></div>';
+        }
+        if (sub.next_payment_at && sub.status === 'active') {
+          html += '<div class="sub-detail"><label>Next Debit Date</label><p>' + formatDate(sub.next_payment_at) + '</p></div>';
+        }
+        html += '<div class="sub-detail"><label>Payments Made</label><p>' + (sub.payments_made || 0) + (sub.total_months && sub.total_months > 0 ? ' of ' + sub.total_months : '') + '</p></div>';
+        html += '</div>';
+
+        // Payment history
+        if (subPayments.length > 0) {
+          html += '<div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);">';
+          html += '<p style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent);margin-bottom:8px;">Payment History</p>';
+          subPayments.forEach(function(p) {
+            html += '<div class="payment-row">';
+            html += '<span style="color:var(--dark);font-weight:500;">' + escapeHtml(p.invoice_number) + '</span>';
+            html += '<span style="color:var(--body);">' + formatDate(p.created_at) + '</span>';
+            html += '<span style="font-weight:700;color:var(--dark);">R' + p.amount.toLocaleString('en-ZA') + '</span>';
+            html += '</div>';
+          });
+          html += '</div>';
+        }
+
+        // Cancel button (only for active subscriptions)
+        if (sub.status === 'active' && sub.payment_type === 'subscription') {
+          html += '<div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border);display:flex;gap:12px;flex-wrap:wrap;">';
+          html += '<button class="btn-outline" style="flex:1;justify-content:center;font-size:13px;padding:10px 20px;border-color:#DC2626;color:#DC2626;" onclick="openCancelModal(\'' + escapeHtml(sub.id) + '\',\'' + escapeHtml(sub.email) + '\')">';
+          html += '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>';
+          html += ' Cancel Subscription</button>';
+          html += '</div>';
+        }
+
+        // Cancelled info
+        if (sub.status === 'cancelled' && sub.cancelled_at) {
+          html += '<div style="margin-top:16px;padding:14px;background:rgba(220,38,38,0.04);border-radius:10px;font-size:13px;color:var(--body);">';
+          html += 'Cancelled on ' + formatDate(sub.cancelled_at);
+          if (sub.cancel_reason) html += ' — Reason: ' + escapeHtml(sub.cancel_reason);
+          html += '</div>';
+        }
+
+        html += '</div>';
+      });
+
+      cardsEl.innerHTML = html;
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return '—';
+      var d = new Date(dateStr);
+      return d.toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
+
+    // ── Cancel Flow ──
+    function openCancelModal(subId, email) {
+      currentSub = { id: subId, email: email };
+      cancelReason = '';
+      document.querySelectorAll('.cancel-reason-btn').forEach(function(b) { b.classList.remove('selected'); });
+      document.getElementById('cancelOtherReason').style.display = 'none';
+      document.getElementById('cancelOtherReason').value = '';
+      document.getElementById('cancelModal').classList.add('show');
+    }
+
+    function closeCancelModal() {
+      document.getElementById('cancelModal').classList.remove('show');
+      currentSub = null;
+    }
+
+    function selectCancelReason(btn) {
+      document.querySelectorAll('.cancel-reason-btn').forEach(function(b) { b.classList.remove('selected'); });
+      btn.classList.add('selected');
+      cancelReason = btn.textContent;
+
+      // Show textarea for "Other reason"
+      var otherField = document.getElementById('cancelOtherReason');
+      if (cancelReason === 'Other reason') {
+        otherField.style.display = 'block';
+        otherField.focus();
+      } else {
+        otherField.style.display = 'none';
+      }
+    }
+
+    function confirmCancel() {
+      if (!currentSub || !cancelReason) {
+        alert('Please select a reason for cancelling.');
+        return;
+      }
+
+      var reason = cancelReason;
+      if (reason === 'Other reason') {
+        var otherText = document.getElementById('cancelOtherReason').value.trim();
+        reason = otherText ? 'Other: ' + otherText : 'Other reason';
+      }
+
+      var btn = document.getElementById('confirmCancelBtn');
+      btn.textContent = 'Cancelling...';
+      btn.disabled = true;
+
+      fetch(CANCEL_FN_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          subscriptionId: currentSub.id,
+          email: currentSub.email,
+          reason: reason,
+          sessionToken: sessionToken,
+        })
+      })
+      .then(function(r) {
+        if (!r.ok) throw new Error('Cancel failed');
+        return r.json();
+      })
+      .then(function() {
+        closeCancelModal();
+        // Re-verify to refresh the view
+        document.getElementById('lookupEmail').value = verifiedEmail;
+        // Go back to step 1 and re-send code (session token was single use)
+        alert('Subscription cancelled successfully.');
+        backToEmail();
+      })
+      .catch(function() {
+        btn.textContent = 'Cancel My Subscription';
+        btn.disabled = false;
+        alert('Something went wrong. Please try again or contact us via WhatsApp.');
+      });
+    }
+
+    // ── Check URL params (redirect from PayFast) ──
+    (function() {
+      var params = new URLSearchParams(window.location.search);
+      var status = params.get('status');
+      if (status === 'success') {
+        var banner = document.createElement('div');
+        banner.style.cssText = 'background:#059669;color:#fff;padding:16px 24px;text-align:center;font-size:14px;font-weight:600;';
+        banner.innerHTML = 'Payment successful! Your subscription is now active. Scroll down to manage it anytime.';
+        document.body.insertBefore(banner, document.body.firstChild);
+        window.history.replaceState({}, '', window.location.pathname);
+      } else if (status === 'cancelled') {
+        var banner = document.createElement('div');
+        banner.style.cssText = 'background:#D97706;color:#fff;padding:16px 24px;text-align:center;font-size:14px;font-weight:600;';
+        banner.innerHTML = 'Payment was cancelled. No charges were made. You can try again whenever you\'re ready.';
+        document.body.insertBefore(banner, document.body.firstChild);
+        window.history.replaceState({}, '', window.location.pathname);
+      }
+    })();
+
+    // Init
+    updateSummary();
+  </script>
+</body>
+</html>
